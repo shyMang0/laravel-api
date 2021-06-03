@@ -28,8 +28,8 @@ Route::get('/products/search/{name}',       [Product_Ctrl::class, 'search']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function() { 
-    
-    Route::get('/user', function (Request $request) { return $request->user(); });
+     
+    Route::get('/user',                 [Auth_Ctrl::class, 'info']);
 
     Route::POST('/products',            [Product_Ctrl::class, 'store']);
     Route::PUT('/products/{id}',        [Product_Ctrl::class, 'update']);

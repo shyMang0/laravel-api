@@ -22,7 +22,7 @@ class Auth_Ctrl extends Controller
             'password' => bcrypt($fields['password'])
         ]);
 
-        $token = $user->createToken('myappToken')->plainTextToken;
+        $token = $user->createToken('myapp-token', ['server:update'])->plainTextToken;
 
         $response = [
             'user' => $user,
@@ -46,7 +46,7 @@ class Auth_Ctrl extends Controller
             return response()->json(['message'=>'Invalid credentials'], 401);
         }
 
-        $token = $user->createToken('myappToken')->plainTextToken;
+        $token = $user->createToken('myapp-token', ['server:update'])->plainTextToken;
 
         $response = [
             'user' => $user,
@@ -60,5 +60,14 @@ class Auth_Ctrl extends Controller
         auth()->user()->tokens()->delete();
 
         return response(['message'=>'Logged out'],200);
+    }
+
+    public function info(Request $r){
+        $user = auth()->user();
+        if ($user->tokenCan('server:update')) {
+            return $r->user();
+        }
+
+        return response(['asdfasdf'],303);
     }
 }
