@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Models\Product;
+
+use App\Http\Controllers\Product_Ctrl;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,18 +16,14 @@ use App\Models\Product;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/products', function(){
-    return Product::all();
-});
 
-Route::post('/products', function(){
-    return Product::create([
-        'name' => 'Product One',
-        'slug' => 'product-one',
-        'description' => 'This is product one',
-        'price' => '99.99'
-    ]);
-});
+Route::get('/products',             [Product_Ctrl::class, 'index']);
+Route::get('/products/{id}',        [Product_Ctrl::class, 'show']);
+Route::get('/products/search/{name}',        [Product_Ctrl::class, 'search']);
+
+Route::POST('/products',            [Product_Ctrl::class, 'store']);
+Route::PUT('/products/{id}',        [Product_Ctrl::class, 'update']);
+Route::DELETE('/products/{id}',     [Product_Ctrl::class, 'destroy']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
