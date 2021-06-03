@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 
 use App\Http\Controllers\Product_Ctrl;
+use App\Http\Controllers\Auth_Ctrl;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,14 +18,27 @@ use App\Http\Controllers\Product_Ctrl;
 |
 */
 
-Route::get('/products',             [Product_Ctrl::class, 'index']);
-Route::get('/products/{id}',        [Product_Ctrl::class, 'show']);
-Route::get('/products/search/{name}',        [Product_Ctrl::class, 'search']);
 
-Route::POST('/products',            [Product_Ctrl::class, 'store']);
-Route::PUT('/products/{id}',        [Product_Ctrl::class, 'update']);
-Route::DELETE('/products/{id}',     [Product_Ctrl::class, 'destroy']);
+Route::POST('/register',                    [Auth_Ctrl::class, 'register']);
+Route::POST('/login',                       [Auth_Ctrl::class, 'login']);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('/products',                     [Product_Ctrl::class, 'index']);
+Route::get('/products/{id}',                [Product_Ctrl::class, 'show']);
+Route::get('/products/search/{name}',       [Product_Ctrl::class, 'search']);
+
+
+Route::group(['middleware' => ['auth:sanctum']], function() { 
+    
+    Route::get('/user', function (Request $request) { return $request->user(); });
+
+    Route::POST('/products',            [Product_Ctrl::class, 'store']);
+    Route::PUT('/products/{id}',        [Product_Ctrl::class, 'update']);
+    Route::DELETE('/products/{id}',     [Product_Ctrl::class, 'destroy']);
+    Route::POST('/logout',              [Auth_Ctrl::class, 'logout']);
+
+}); 
+
+
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
