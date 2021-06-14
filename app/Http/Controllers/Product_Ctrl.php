@@ -15,7 +15,11 @@ class Product_Ctrl extends Controller
      */
     public function index()
     { 
-        return Product::all();
+        try {
+            return Product::all();
+        } catch (\Throwable $th) {
+            return response()->json(["message" => "Database Error"],500);
+        }
     }
 
     /**
